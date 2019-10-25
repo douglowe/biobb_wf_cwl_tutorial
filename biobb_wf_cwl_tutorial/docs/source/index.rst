@@ -7,8 +7,8 @@
 
 .. image:: https://bioexcel.eu/wp-content/uploads/2019/04/Bioexcell_logo_1080px_transp.png
 
-Protein Ligand Complex MD Setup tutorial
-----------------------------------------
+Common Workflow Language with BioExcel Building Blocks
+-------------------------------------------------------
 
 Contents
 ========
@@ -19,6 +19,6 @@ Contents
    Introduction & installation <readme>
    Tutorial <tutorial>
 
-`Github repository <https://github.com/bioexcel/biobb_wf_protein-complex_md_setup>`_.
+`Github repository <https://github.com/bioexcel/biobb_wf_cwl_tutorial>`_.
 ===================================================================
 
