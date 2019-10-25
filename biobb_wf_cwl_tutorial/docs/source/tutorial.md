@@ -52,8 +52,7 @@ This tutorial aims to illustrate the process of **building up a CWL workflow** u
  5. [Questions & Comments](#questions)
 
 ***
-<img src="https://bioexcel.eu/wp-content/uploads/2019/04/Bioexcell_logo_1080px_transp.png" alt="Bioexcel2 logo"
-    title="Bioexcel2 logo" width="400" />
+![Bioexcel2_CWL.png](attachment:Bioexcel2_CWL.png)
 ***
 
 
@@ -93,14 +92,6 @@ hints:
     dockerPull: quay.io/biocontainers/biobb_io:latest
 ```
 
-
-      File "<ipython-input-1-db8f24928830>", line 1
-        hints:
-              ^
-    SyntaxError: invalid syntax
-
-
-
 * **namespaces and schemas**: Input and output **metadata** may be represented within a tool or workflow. Such **metadata** must use a **namespace prefix** listed in the **$namespaces and $schemas sections** of the document. All **BioExcel building blocks CWL specifications** use the **EDAM ontology** (http://edamontology.org/) as **namespace**, with all terms included in its **Web Ontology Language** (owl) of knowledge representation (http://edamontology.org/EDAM_1.22.owl). **BioExcel** is contributing to the expansion of the **EDAM ontology** with the addition of new structural terms such as [GROMACS XTC format](http://edamontology.org/format_3875) or the [trajectory visualization operation](http://edamontology.org/operation_3890).
 
 
@@ -110,14 +101,6 @@ $namespaces:
 $schemas:
   - http://edamontology.org/EDAM_1.22.owl
 ```
-
-
-      File "<ipython-input-2-d01bc27e96f0>", line 1
-        $namespaces:
-        ^
-    SyntaxError: invalid syntax
-
-
 
 * **inputs**: The **inputs section** of a **tool** contains a list of input parameters that **control how to run the tool**. Each parameter has an **id** for the name of parameter, and **type** describing what types of values are valid for that parameter. Available primitive types are *string, int, long, float, double, and null*; complex types are *array and record*; in addition there are special types *File, Directory and Any*. The field **inputBinding** is optional and indicates whether and how the input parameter should appear on the tool’s command line, in which **position** (position), and with which **name** (prefix). The **default field** stores the **default value** for the particular **input parameter**. <br>In this particular example, the **Pdb building block** has two different **input parameters**: *output_pdb_path* and *config*. The *output_pdb_path* input parameter defines the name of the **output file** that will contain the downloaded **PDB structure**. The *config* parameter is common to all **BioExcel building blocks**, and gathers all the **properties** of the building block in a **json format**. The **question mark** after the string type (*string?*) denotes that this input is **optional**. 
 
