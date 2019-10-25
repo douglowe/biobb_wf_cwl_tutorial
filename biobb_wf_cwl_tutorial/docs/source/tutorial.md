@@ -52,7 +52,8 @@ This tutorial aims to illustrate the process of **building up a CWL workflow** u
  5. [Questions & Comments](#questions)
 
 ***
-![Bioexcel2_CWL.png](attachment:Bioexcel2_CWL.png)
+<img src="https://bioexcel.eu/wp-content/uploads/2019/04/Bioexcell_logo_1080px_transp.png" alt="Bioexcel2 logo"
+    title="Bioexcel2 logo" width="400" />
 ***
 
 

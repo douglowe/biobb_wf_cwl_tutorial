@@ -1,3 +1,4 @@
+[![](https://readthedocs.org/projects/biobb-wf-cwl-tutorial/badge/?version=latest)](https://biobb-wf-cwl-tutorial.readthedocs.io/en/latest/?badge=latest)
 
 # Common Workflow Language with BioExcel Building Blocks (biobb)
 
@@ -25,7 +26,7 @@ This tutorial aims to illustrate the process of **building up a CWL workflow** u
 
 ## Tutorial
 
-Click here to [view tutorial in Read the Docs]()
+Click here to [view tutorial in Read the Docs](https://biobb-wf-cwl-tutorial.readthedocs.io/en/latest/?badge=latest)
 
 ***
 
