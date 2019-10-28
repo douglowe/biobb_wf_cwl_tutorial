@@ -52,9 +52,10 @@ This tutorial aims to illustrate the process of **building up a CWL workflow** u
  5. [Questions & Comments](#questions)
 
 ***
-![Bioexcel2_CWL.png](attachment:Bioexcel2_CWL.png)
-***
 
+<img src="_static/logo.png" />
+
+***
 
 <a id="intro"></a>
 ## CWL workflows: Brief Introduction
@@ -623,14 +624,6 @@ inputs:
   step22_image_config: string
   step23_dry_config: string
 ```
-
-
-      File "<ipython-input-3-67b3cfb6477e>", line 1
-        inputs:
-               ^
-    SyntaxError: invalid syntax
-
-
 
 <a id="mdoutputs"></a>
 ### Outputs:
