@@ -1004,11 +1004,13 @@ cwltool BioExcel-CWL-MDSetup.cwl BioExcel-CWL-MDSetup-job.yml
 
 ***
 <a id="questions"></a>
+
 ## Questions & Comments
 
-Questions, issues, suggestions and comments are really welcome! 
+Questions, issues, suggestions and comments are really welcome!
 
-* GitHub issues: 
-    * https://github.com/bioexcel/biobb
+* GitHub issues:
+    * [https://github.com/bioexcel/biobb](https://github.com/bioexcel/biobb)
+
 * BioExcel forum:
-    * https://ask.bioexcel.eu/  (TODO: biobb category)
+    * [https://ask.bioexcel.eu/c/BioExcel-Building-Blocks-library](https://ask.bioexcel.eu/c/BioExcel-Building-Blocks-library)
