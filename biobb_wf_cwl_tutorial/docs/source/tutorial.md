@@ -1,4 +1,3 @@
-
 # Common Workflow Language with BioExcel Building Blocks
 ### Based on the Protein MD Setup tutorial using BioExcel Building Blocks (biobb)
 ***
@@ -53,7 +52,7 @@ This tutorial aims to illustrate the process of **building up a CWL workflow** u
 
 ***
 
-<img src="_static/logo.png" />
+<img src="logo.png" />
 
 ***
 
@@ -113,14 +112,14 @@ inputs:
     inputBinding:
       position: 1
       prefix: --output_pdb_path
-    default: "downloaded_structure.pdb"
+    default: 'downloaded_structure.pdb'
 
   config:
     type: string?
     inputBinding:
       position: 2
       prefix: --config
-    default: "{\"pdb_code\" : \"1aki\"}"
+    default: '{"pdb_code" : "1aki"}'
 ```
 
 * **outputs**: The **outputs section** of a **tool** contains a list of output parameters that should be returned after running the **tool**. Similarly to the inputs section, each parameter has an **id** for the name of parameter, and **type** describing what types of values are valid for that parameter. The **outputBinding** field describes how to set the value of each output parameter. The **glob field** consists of the name of a file in the **output directory**. In the **BioExcel building blocks**, every **output** has an associated **input parameter** defined in the previous input section, defining the name of the file to be generated. <br>In the particular **Pdb building block** example, the *output_pdb_file* parameter of type *File* is coupled to the *output_pdb_path* input parameter, using the **outputBinding** and the **glob** fields. The standard **PDB** format of the output file is also specified using the **EDAM ontology** format id 1476 ([edam:format_1476](http://edamontology.org/format_1476)).     
@@ -160,15 +159,15 @@ inputs:
     inputBinding:
       position: 1
       prefix: --output_pdb_path
-    default: "downloaded_structure.pdb"
+    default: 'downloaded_structure.pdb'
 
   config:
     type: string?
     inputBinding:
       position: 2
       prefix: --config
-    default: "{\"pdb_code\" : \"1aki\"}"
-        
+    default: '{"pdb_code" : "1aki"}'
+       
 outputs:
   output_pdb_file:
     type: File
@@ -268,12 +267,10 @@ As previously stated, all **CWL workflows** are divided in **two files**: the **
 * step1_output_name: **"tutorial_1aki.pdb"**
 * step1_properties: **{"pdb_code" : "1aki"}**
 
-*Note that all double quotes in JSON format must be escaped.*
-
 
 ```python
-step1_output_name: "tutorial_1aki.pdb"
-step1_properties: "{\"pdb_code\" : \"1aki\"}"
+step1_output_name: 'tutorial_1aki.pdb'
+step1_properties: '{"pdb_code" : "1aki"}'
 ```
 
 <a id="wf"></a>
@@ -290,8 +287,8 @@ Example of a short **CWL workflow** with **BioExcel building blocks**, which ret
 cwlVersion: v1.0
 class: Workflow
 inputs:
-  step1_properties: "{\"pdb_code\" : \"1aki\"}"
-  step1_output_name: "tutorial_1aki.pdb"
+  step1_properties: '{"pdb_code" : "1aki"}'
+  step1_output_name: 'tutorial_1aki.pdb'
 
 outputs:
   pdb:
@@ -961,28 +958,28 @@ All the steps were defined as *strings* in the **CWL workflow**; **Building bloc
 # Protein MD-Setup CWL workflow with BioExcel building blocks - Input YAML configuration file
 # https://github.com/bioexcel/biobb_wf_md_setup
 
-step1_pdb_name: "tutorial.pdb"
-step1_pdb_config: "{\"pdb_code\" : \"1aki\"}"
-step4_editconf_config: "{\"box_type\": \"cubic\",\"distance_to_molecule\": 1.0}"
-step6_gppion_config: "{\"mdp\": {\"type\":\"minimization\"}}"
-step7_genion_config: "{\"neutral\": \"True\"}"
-step8_gppmin_config: "{\"mdp\": {\"type\":\"minimization\", \"nsteps\":\"5000\", \"emtol\":\"500\"}}"
-step10_energy_min_config: "{\"terms\":  [\"Potential\"]}"
-step10_energy_min_name: "energy_min.xvg"
-step11_gppnvt_config: "{\"mdp\": {\"type\":\"nvt\", \"nsteps\":\"5000\", \"dt\":0.002, \"define\":\"-DPOSRES\"}}"
-step13_energy_nvt_config: "{\"terms\":  [\"Temperature\"]}"
-step13_energy_nvt_name: "energy_nvt.xvg"
-step14_gppnpt_config: "{\"mdp\": {\"type\":\"npt\", \"nsteps\":\"5000\"}}"
-step16_energy_npt_config: "{\"terms\":  [\"Pressure\",\"Density\"]}"
-step16_energy_npt_name: "energy_npt.xvg"
-step17_gppmd_config: "{\"mdp\": {\"type\":\"free\", \"nsteps\":\"50000\"}}"
-step19_rmsfirst_config: "{\"selection\": \"Backbone\"}"
-step19_rmsfirst_name: "rmsd_first.xvg"
-step20_rmsexp_config: "{\"selection\": \"Backbone\"}"
-step20_rmsexp_name: "rmsd_exp.xvg"
-step21_rgyr_config: "{\"selection\": \"Backbone\"}"
-step22_image_config: "{\"center_selection\":\"Protein\",\"output_selection\":\"Protein\",\"pbc\":\"mol\"}"
-step23_dry_config: "{\"selection\": \"Protein\"}"
+step1_pdb_name: 'tutorial.pdb'
+step1_pdb_config: '{"pdb_code" : "1aki"}'
+step4_editconf_config: '{"box_type": "cubic","distance_to_molecule": 1.0}'
+step6_gppion_config: '{"mdp": {"type":"minimization"}}'
+step7_genion_config: '{"neutral": "True"}'
+step8_gppmin_config: '{"mdp": {"type":"minimization", "nsteps":"5000", "emtol":"500"}}'
+step10_energy_min_config: '{"terms":  ["Potential"]}'
+step10_energy_min_name: 'energy_min.xvg'
+step11_gppnvt_config: '{"mdp": {"type":"nvt", "nsteps":"5000", "dt":0.002, "define":"-DPOSRES"}}'
+step13_energy_nvt_config: '{"terms":  ["Temperature"]}'
+step13_energy_nvt_name: 'energy_nvt.xvg'
+step14_gppnpt_config: '{"mdp": {"type":"npt", "nsteps":"5000"}}'
+step16_energy_npt_config: '{"terms":  ["Pressure","Density"]}'
+step16_energy_npt_name: 'energy_npt.xvg'
+step17_gppmd_config: '{"mdp": {"type":"free", "nsteps":"50000"}}'
+step19_rmsfirst_config: '{"selection": "Backbone"}'
+step19_rmsfirst_name: 'rmsd_first.xvg'
+step20_rmsexp_config: '{"selection": "Backbone"}'
+step20_rmsexp_name: 'rmsd_exp.xvg'
+step21_rgyr_config: '{"selection": "Backbone"}'
+step22_image_config: '{"center_selection":"Protein","output_selection":"Protein","pbc":"mol"}'
+step23_dry_config: '{"selection": "Protein"}'
 ```
 
 <a id="mdcwlrun"></a>
@@ -1014,3 +1011,4 @@ Questions, issues, suggestions and comments are really welcome!
 
 * BioExcel forum:
     * [https://ask.bioexcel.eu/c/BioExcel-Building-Blocks-library](https://ask.bioexcel.eu/c/BioExcel-Building-Blocks-library)
+
