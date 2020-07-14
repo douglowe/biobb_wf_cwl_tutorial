@@ -199,6 +199,13 @@ Now that we have seen the **BioExcel building blocks CWL descriptions**, we can 
 
 cwlVersion: v1.0
 class: Workflow
+label: Example CWL Header
+doc: |
+  An example of how to create a CWl header. We have specified the version
+  of CWL that we are using; the class, which is a 'workflow'.  The label
+  field should provide a short title or description of the workflow and
+  the description should provide a longer description of what the workflow
+  doe.
 ```
 
 <a id="inputs"></a>
@@ -219,16 +226,21 @@ inputs:
 <a id="outputs"></a>
 ### Outputs:
 
-The **outputs section** describes the set of **final outputs** from the **workflow**. These outputs can be a collection of outputs from **different steps of the workflow**. Each parameter consists of an **identifier**, a **data type**, and an **outputSource**, which connects the output parameter of a **particular step** to the **workflow final output parameter**.
+The **outputs:** section describes the set of **final outputs** from the **workflow**. These outputs can be a collection of outputs from **different steps of the workflow**. Each output is a `key: value` pair. The `key` should be a unique identifier, and the value should be a dictionary (consisting of `key: value` pairs). These `keys` consists of `label`, which is a title or name for the output; `doc`, which is a longer description of what this output is; `type`, which is the data type expected; and `outputSource`, which connects the output parameter of a **particular step** to the **workflow final output parameter**.
 
-**Example**: Step 1 of the workflow, download a **protein structure** from the **PDB database**. The *pdb* **output** is a **file** containing the **protein structure** in **PDB format**, which is connected to the output parameter *output_pdb_file* of the **step1 of the workflow** (*step1_pdb*).
-
+**Example**: 
 
 ```python
-# CWL workflow outputs section example
 outputs:
-  pdb:
-    type: File
+  pdb: #unique identifier
+    label: Protein structure  
+    doc: |
+      Step 1 of the workflow, download a 'protein structure' from the
+      'PDB database'. The *pdb* 'output' is a 'file' containing the
+      'protein structure' in 'PDB format', which is connected to the
+      output parameter *output_pdb_file* of the 'step1 of the workflow'
+      (*step1_pdb*).
+    type: File #data type
     outputSource: step1_pdb/output_pdb_file
 ```
 
@@ -244,15 +256,22 @@ The **steps section** describes the actual steps of the workflow. Steps are **co
 
 ```python
 # CWL workflow steps section example
-steps:
   step1_pdb:
-    run: biobb_adapters/pdb.cwl
+    label: Fetch PDB Structure
+    doc: |
+      Download a protein structure from the PDB database
+    run: biobb/biobb_adapters/cwl/biobb_io/mmb_api/pdb.cwl
     in:
-      config: step1_properties
+      output_pdb_path: step1_pdb_name
+      config: step1_pdb_config
     out: [output_pdb_file]
-        
+
   step2_fixsidechain:
-    run: biobb_adapters/fix_side_chain.cwl
+    label: Fix Protein structure
+    doc: |
+      Fix the side chains, adding any side chain atoms missing in the
+      original structure.
+    run: biobb/biobb_adapters/cwl/biobb_model/model/fix_side_chain.cwl
     in:
       input_pdb_path: step1_pdb/output_pdb_file
     out: [output_pdb_file]
@@ -283,12 +302,17 @@ Example of a short **CWL workflow** with **BioExcel building blocks**, which ret
 
 
 ```python
-# Example of a short CWL workflow with BioExcel building blocks 
-
 # !/usr/bin/env cwl-runner
 
 cwlVersion: v1.0
 class: Workflow
+label: Example of a short CWL workflow with BioExcel building blocks
+doc: |
+  Example of a short 'CWL workflow' with 'BioExcel building blocks', which
+  retrieves a 'PDB file' for the 'Lysozyme protein structure' from the RCSB PDB
+  database ('step1: pdb.cwl'), and fixes the possible problems in the structure,
+  adding 'missing side chain atoms' if needed ('step2: fix_side_chain.cwl').
+
 inputs:
   step1_properties: "{\"pdb_code\" : \"1aki\"}"
   step1_output_name: "tutorial_1aki.pdb"
@@ -300,6 +324,9 @@ outputs:
 
 steps:
   step1_pdb:
+    label: Fetch PDB Structure
+    doc: |
+      Download a protein structure from the PDB database
     run: biobb_adapters/pdb.cwl
     in:
       output_pdb_path: step1_output_name
@@ -307,6 +334,10 @@ steps:
     out: [output_pdb_file]
         
   step2_fixsidechain:
+    label: Fix Protein structure
+    doc: |
+      Fix the side chains, adding any side chain atoms missing in the
+      original structure.
     run: biobb_adapters/fix_side_chain.cwl
     in:
       input_pdb_path: step1_pdb/output_pdb_file
@@ -323,7 +354,7 @@ It is important to note that in order to properly run the **CWL workflow**, the 
 The **command line** is shown in the cell below:
 
 
-```python
+```bash
 # Run CWL workflow with CWL tool description reference implementation (cwltool).
 cwltool BioExcel-CWL-firstWorkflow.cwl BioExcel-CWL-firstWorkflow-job.yml
 ```
@@ -334,7 +365,7 @@ cwltool BioExcel-CWL-firstWorkflow.cwl BioExcel-CWL-firstWorkflow-job.yml
 The **execution of the workflow** will write information to the standard output such as the **step being performed**, the **way it is run** (command line, docker container, etc.), **inputs and outputs** used, and **state of each step** (success, failed). The next cell contains a **real output** for the **execution of our first example**:
 
 
-```python
+```bash
 Resolved 'BioExcel-CWL-firstWorkflow.cwl' to 'file:///PATH/biobb_wf_md_setup/cwl/BioExcel-CWL-firstWorkflow.cwl'
 [workflow BioExcel-CWL-firstWorkflow.cwl] start
 [step step1_pdb] start
@@ -422,41 +453,51 @@ Mandatory and optional **inputs** and **outputs** of every **building block** ca
 
 
 ```python
-steps:
   step1_pdb:
-    run: biobb_adapters/pdb.cwl
+    label: Fetch PDB Structure
+    doc: |
+      Download a protein structure from the PDB database
+    run: biobb/biobb_adapters/cwl/biobb_io/mmb_api/pdb.cwl
     in:
       output_pdb_path: step1_pdb_name
       config: step1_pdb_config
     out: [output_pdb_file]
 
   step2_fixsidechain:
-    run: biobb_adapters/fix_side_chain.cwl
+    label: Fix Protein structure
+    doc: |
+      Fix the side chains, adding any side chain atoms missing in the
+      original structure.
+    run: biobb/biobb_adapters/cwl/biobb_model/model/fix_side_chain.cwl
     in:
       input_pdb_path: step1_pdb/output_pdb_file
     out: [output_pdb_file]
 
   step3_pdb2gmx:
-    run: biobb_adapters/pdb2gmx.cwl
+    label: Create Protein System Topology
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/pdb2gmx.cwl
     in:
       input_pdb_path: step2_fixsidechain/output_pdb_file
     out: [output_gro_file, output_top_zip_file]
 
   step4_editconf:
-    run: biobb_adapters/editconf.cwl
+    label: Create Solvent Box
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/editconf.cwl
     in:
       input_gro_path: step3_pdb2gmx/output_gro_file
     out: [output_gro_file]
 
   step5_solvate:
-    run: biobb_adapters/solvate.cwl
+    label: Fill the Box with Water Molecules
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/solvate.cwl
     in:
       input_solute_gro_path: step4_editconf/output_gro_file
       input_top_zip_path: step3_pdb2gmx/output_top_zip_file
     out: [output_gro_file, output_top_zip_file]
 
   step6_grompp_genion:
-    run: biobb_adapters/grompp.cwl
+    label: Add Ions - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step6_gppion_config
       input_gro_path: step5_solvate/output_gro_file
@@ -464,7 +505,8 @@ steps:
     out: [output_tpr_file]
 
   step7_genion:
-    run: biobb_adapters/genion.cwl
+    label: Add Ions - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/genion.cwl
     in:
       config: step7_genion_config
       input_tpr_path: step6_grompp_genion/output_tpr_file
@@ -472,7 +514,8 @@ steps:
     out: [output_gro_file, output_top_zip_file]
 
   step8_grompp_min:
-    run: biobb_adapters/grompp.cwl
+    label: Energetically Minimize the System - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step8_gppmin_config
       input_gro_path: step7_genion/output_gro_file
@@ -480,20 +523,24 @@ steps:
     out: [output_tpr_file]
 
   step9_mdrun_min:
-    run: biobb_adapters/mdrun.cwl
+    label: Energetically Minimize the System - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step8_grompp_min/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file]
 
   step10_energy_min:
-    run: biobb_adapters/energy.cwl
+    label: Energetically Minimize the System - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_energy.cwl
     in:
       config: step10_energy_min_config
+      output_xvg_path: step10_energy_min_name
       input_energy_path: step9_mdrun_min/output_edr_file
     out: [output_xvg_file]
 
   step11_grompp_nvt:
-    run: biobb_adapters/grompp.cwl
+    label: Equilibrate the System (NVT) - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step11_gppnvt_config
       input_gro_path: step9_mdrun_min/output_gro_file
@@ -501,20 +548,24 @@ steps:
     out: [output_tpr_file]
 
   step12_mdrun_nvt:
-    run: biobb_adapters/mdrun.cwl
+    label: Equilibrate the System (NVT) - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step11_grompp_nvt/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file, output_cpt_file]
 
   step13_energy_nvt:
-    run: biobb_adapters/energy.cwl
+    label: Equilibrate the System (NVT) - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_energy.cwl
     in:
       config: step13_energy_nvt_config
+      output_xvg_path: step13_energy_nvt_name
       input_energy_path: step12_mdrun_nvt/output_edr_file
     out: [output_xvg_file]
 
   step14_grompp_npt:
-    run: biobb_adapters/grompp.cwl
+    label: Equilibrate the System (NPT) - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step14_gppnpt_config
       input_gro_path: step12_mdrun_nvt/output_gro_file
@@ -523,20 +574,24 @@ steps:
     out: [output_tpr_file]
 
   step15_mdrun_npt:
-    run: biobb_adapters/mdrun.cwl
+    label: Equilibrate the System (NPT) - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step14_grompp_npt/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file, output_cpt_file]
 
   step16_energy_npt:
-    run: biobb_adapters/energy.cwl
+    label: Equilibrate the System (NPT) - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_energy.cwl
     in:
       config: step16_energy_npt_config
+      output_xvg_path: step16_energy_npt_name
       input_energy_path: step15_mdrun_npt/output_edr_file
     out: [output_xvg_file]
 
   step17_grompp_md:
-    run: biobb_adapters/grompp.cwl
+    label: Free Molecular Dynamics Simulation - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step17_gppmd_config
       input_gro_path: step15_mdrun_npt/output_gro_file
@@ -545,29 +600,35 @@ steps:
     out: [output_tpr_file]
 
   step18_mdrun_md:
-    run: biobb_adapters/mdrun.cwl
+    label: Free Molecular Dynamics Simulation - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step17_grompp_md/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file, output_cpt_file]
 
   step19_rmsfirst:
-    run: biobb_adapters/rms.cwl
+    label: Post-processing Resulting 3D Trajectory - part 1
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_rms.cwl
     in:
       config: step19_rmsfirst_config
+      output_xvg_path: step19_rmsfirst_name
       input_structure_path: step17_grompp_md/output_tpr_file
       input_traj_path: step18_mdrun_md/output_trr_file
     out: [output_xvg_file]
 
   step20_rmsexp:
-    run: biobb_adapters/rms.cwl
+    label: Post-processing Resulting 3D Trajectory - part 2
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_rms.cwl
     in:
       config: step20_rmsexp_config
+      output_xvg_path: step20_rmsexp_name
       input_structure_path: step8_grompp_min/output_tpr_file
       input_traj_path: step18_mdrun_md/output_trr_file
     out: [output_xvg_file]
 
   step21_rgyr:
-    run: biobb_adapters/rgyr.cwl
+    label: Post-processing Resulting 3D Trajectory - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_rgyr.cwl
     in:
       config: step21_rgyr_config
       input_structure_path: step8_grompp_min/output_tpr_file
@@ -575,7 +636,8 @@ steps:
     out: [output_xvg_file]
 
   step22_image:
-    run: biobb_adapters/gmximage.cwl
+    label: Post-processing Resulting 3D Trajectory - part 4
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_image.cwl
     in:
       config: step22_image_config
       input_top_path: step17_grompp_md/output_tpr_file
@@ -583,7 +645,8 @@ steps:
     out: [output_traj_file]
 
   step23_dry:
-    run: biobb_adapters/gmxtrjconvstr.cwl
+    label: Post-processing Resulting 3D Trajectory - part 5
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_trjconv_str.cwl
     in:
       config: step23_dry_config
       input_structure_path: step18_mdrun_md/output_gro_file
@@ -656,42 +719,97 @@ Please note that the name of the **output files** is sometimes fixed by a **spec
 ```python
 outputs:
   trr:
+    label: Trajectories - Raw trajectory
+    doc: |
+      Raw trajectory from the free simulation step
     type: File
     outputSource: step18_mdrun_md/output_trr_file
+    
   trr_imaged_dry:
+    label: Trajectories - Post-processed trajectory
+    doc: |
+      Post-processed trajectory, dehydrated, imaged (rotations and translations
+      removed) and centered.
     type: File
     outputSource: step22_image/output_traj_file
+    
   gro_dry:
+    label: Resulting protein structure
+    doc: |
+      Resulting protein structure taken from the post-processed trajectory, to
+      be used as a topology, usually for visualization purposes.
     type: File
     outputSource: step23_dry/output_str_file
+    
   gro:
+    label: Structures - Raw structure
+    doc: |
+      Raw structure from the free simulation step.
     type: File
     outputSource: step18_mdrun_md/output_gro_file
+
   cpt:
+    label: Checkpoint file
+    doc: |
+      GROMACS portable checkpoint file, allowing to restore (continue) the
+      simulation from the last step of the setup process.
     type: File
     outputSource: step18_mdrun_md/output_cpt_file
+
   tpr:
+    label: Topologies GROMACS portable binary run
+    doc: |
+      GROMACS portable binary run input file, containing the starting structure
+      of the simulation, the molecular topology and all the simulation parameters.
     type: File
     outputSource: step17_grompp_md/output_tpr_file
+
   top:
+    label: GROMACS topology file
+    doc: |
+      GROMACS topology file, containing the molecular topology in an ASCII
+      readable format.
     type: File
     outputSource: step7_genion/output_top_zip_file
+    
   xvg_min:
+    label: System Setup Observables - Potential Energy
+    doc: |
+      Potential energy of the system during the minimization step.
     type: File
     outputSource: step10_energy_min/output_xvg_file
+
   xvg_nvt:
+    label: System Setup Observables - Temperature
+    doc: |
+      Temperature of the system during the NVT equilibration step.
     type: File
     outputSource: step13_energy_nvt/output_xvg_file
+    
   xvg_npt:
+    label: System Setup Observables - Pressure and density 
     type: File
     outputSource: step16_energy_npt/output_xvg_file
+    
   xvg_rmsfirst:
+    label: Simulation Analysis
+    doc: |
+      Root Mean Square deviation (RMSd) throughout the whole free simulation
+      step against the first snapshot of the trajectory (equilibrated system).
     type: File
     outputSource: step19_rmsfirst/output_xvg_file
   xvg_rmsexp:
+    label: Simulation Analysis
+    doc: |
+      Root Mean Square deviation (RMSd) throughout the whole free simulation
+      step against the experimental structure (minimized system).
     type: File
     outputSource: step20_rmsexp/output_xvg_file
+    
   xvg_rgyr:
+    label: Simulation Analysis
+    doc: |
+      Radius of Gyration (RGyr) of the molecule throughout the whole free simulation step
     type: File
     outputSource: step21_rgyr/output_xvg_file
 ```
@@ -736,80 +854,146 @@ inputs:
 
 outputs:
   trr:
+    label: Trajectories - Raw trajectory
+    doc: |
+      Raw trajectory from the free simulation step
     type: File
     outputSource: step18_mdrun_md/output_trr_file
+    
   trr_imaged_dry:
+    label: Trajectories - Post-processed trajectory
+    doc: |
+      Post-processed trajectory, dehydrated, imaged (rotations and translations
+      removed) and centered.
     type: File
     outputSource: step22_image/output_traj_file
+    
   gro_dry:
+    label: Resulting protein structure
+    doc: |
+      Resulting protein structure taken from the post-processed trajectory, to
+      be used as a topology, usually for visualization purposes.
     type: File
     outputSource: step23_dry/output_str_file
+    
   gro:
+    label: Structures - Raw structure
+    doc: |
+      Raw structure from the free simulation step.
     type: File
     outputSource: step18_mdrun_md/output_gro_file
+
   cpt:
+    label: Checkpoint file
+    doc: |
+      GROMACS portable checkpoint file, allowing to restore (continue) the
+      simulation from the last step of the setup process.
     type: File
     outputSource: step18_mdrun_md/output_cpt_file
+
   tpr:
+    label: Topologies GROMACS portable binary run
+    doc: |
+      GROMACS portable binary run input file, containing the starting structure
+      of the simulation, the molecular topology and all the simulation parameters.
     type: File
     outputSource: step17_grompp_md/output_tpr_file
+
   top:
+    label: GROMACS topology file
+    doc: |
+      GROMACS topology file, containing the molecular topology in an ASCII
+      readable format.
     type: File
     outputSource: step7_genion/output_top_zip_file
+    
   xvg_min:
+    label: System Setup Observables - Potential Energy
+    doc: |
+      Potential energy of the system during the minimization step.
     type: File
     outputSource: step10_energy_min/output_xvg_file
+
   xvg_nvt:
+    label: System Setup Observables - Temperature
+    doc: |
+      Temperature of the system during the NVT equilibration step.
     type: File
     outputSource: step13_energy_nvt/output_xvg_file
+    
   xvg_npt:
+    label: System Setup Observables - Pressure and density 
     type: File
     outputSource: step16_energy_npt/output_xvg_file
+    
   xvg_rmsfirst:
+    label: Simulation Analysis
+    doc: |
+      Root Mean Square deviation (RMSd) throughout the whole free simulation
+      step against the first snapshot of the trajectory (equilibrated system).
     type: File
     outputSource: step19_rmsfirst/output_xvg_file
   xvg_rmsexp:
+    label: Simulation Analysis
+    doc: |
+      Root Mean Square deviation (RMSd) throughout the whole free simulation
+      step against the experimental structure (minimized system).
     type: File
     outputSource: step20_rmsexp/output_xvg_file
+    
   xvg_rgyr:
+    label: Simulation Analysis
+    doc: |
+      Radius of Gyration (RGyr) of the molecule throughout the whole free simulation step
     type: File
     outputSource: step21_rgyr/output_xvg_file
 
 steps:
   step1_pdb:
-    run: biobb_adapters/pdb.cwl
+    label: Fetch PDB Structure
+    doc: |
+      Download a protein structure from the PDB database
+    run: biobb/biobb_adapters/cwl/biobb_io/mmb_api/pdb.cwl
     in:
       output_pdb_path: step1_pdb_name
       config: step1_pdb_config
     out: [output_pdb_file]
 
   step2_fixsidechain:
-    run: biobb_adapters/fix_side_chain.cwl
+    label: Fix Protein structure
+    doc: |
+      Fix the side chains, adding any side chain atoms missing in the
+      original structure.
+    run: biobb/biobb_adapters/cwl/biobb_model/model/fix_side_chain.cwl
     in:
       input_pdb_path: step1_pdb/output_pdb_file
     out: [output_pdb_file]
 
   step3_pdb2gmx:
-    run: biobb_adapters/pdb2gmx.cwl
+    label: Create Protein System Topology
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/pdb2gmx.cwl
     in:
       input_pdb_path: step2_fixsidechain/output_pdb_file
     out: [output_gro_file, output_top_zip_file]
 
   step4_editconf:
-    run: biobb_adapters/editconf.cwl
+    label: Create Solvent Box
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/editconf.cwl
     in:
       input_gro_path: step3_pdb2gmx/output_gro_file
     out: [output_gro_file]
 
   step5_solvate:
-    run: biobb_adapters/solvate.cwl
+    label: Fill the Box with Water Molecules
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/solvate.cwl
     in:
       input_solute_gro_path: step4_editconf/output_gro_file
       input_top_zip_path: step3_pdb2gmx/output_top_zip_file
     out: [output_gro_file, output_top_zip_file]
 
   step6_grompp_genion:
-    run: biobb_adapters/grompp.cwl
+    label: Add Ions - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step6_gppion_config
       input_gro_path: step5_solvate/output_gro_file
@@ -817,7 +1001,8 @@ steps:
     out: [output_tpr_file]
 
   step7_genion:
-    run: biobb_adapters/genion.cwl
+    label: Add Ions - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/genion.cwl
     in:
       config: step7_genion_config
       input_tpr_path: step6_grompp_genion/output_tpr_file
@@ -825,7 +1010,8 @@ steps:
     out: [output_gro_file, output_top_zip_file]
 
   step8_grompp_min:
-    run: biobb_adapters/grompp.cwl
+    label: Energetically Minimize the System - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step8_gppmin_config
       input_gro_path: step7_genion/output_gro_file
@@ -833,13 +1019,15 @@ steps:
     out: [output_tpr_file]
 
   step9_mdrun_min:
-    run: biobb_adapters/mdrun.cwl
+    label: Energetically Minimize the System - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step8_grompp_min/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file]
 
   step10_energy_min:
-    run: biobb_adapters/energy.cwl
+    label: Energetically Minimize the System - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_energy.cwl
     in:
       config: step10_energy_min_config
       output_xvg_path: step10_energy_min_name
@@ -847,7 +1035,8 @@ steps:
     out: [output_xvg_file]
 
   step11_grompp_nvt:
-    run: biobb_adapters/grompp.cwl
+    label: Equilibrate the System (NVT) - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step11_gppnvt_config
       input_gro_path: step9_mdrun_min/output_gro_file
@@ -855,13 +1044,15 @@ steps:
     out: [output_tpr_file]
 
   step12_mdrun_nvt:
-    run: biobb_adapters/mdrun.cwl
+    label: Equilibrate the System (NVT) - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step11_grompp_nvt/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file, output_cpt_file]
 
   step13_energy_nvt:
-    run: biobb_adapters/energy.cwl
+    label: Equilibrate the System (NVT) - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_energy.cwl
     in:
       config: step13_energy_nvt_config
       output_xvg_path: step13_energy_nvt_name
@@ -869,7 +1060,8 @@ steps:
     out: [output_xvg_file]
 
   step14_grompp_npt:
-    run: biobb_adapters/grompp.cwl
+    label: Equilibrate the System (NPT) - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step14_gppnpt_config
       input_gro_path: step12_mdrun_nvt/output_gro_file
@@ -878,13 +1070,15 @@ steps:
     out: [output_tpr_file]
 
   step15_mdrun_npt:
-    run: biobb_adapters/mdrun.cwl
+    label: Equilibrate the System (NPT) - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step14_grompp_npt/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file, output_cpt_file]
 
   step16_energy_npt:
-    run: biobb_adapters/energy.cwl
+    label: Equilibrate the System (NPT) - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_energy.cwl
     in:
       config: step16_energy_npt_config
       output_xvg_path: step16_energy_npt_name
@@ -892,7 +1086,8 @@ steps:
     out: [output_xvg_file]
 
   step17_grompp_md:
-    run: biobb_adapters/grompp.cwl
+    label: Free Molecular Dynamics Simulation - part 1
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/grompp.cwl
     in:
       config: step17_gppmd_config
       input_gro_path: step15_mdrun_npt/output_gro_file
@@ -901,13 +1096,15 @@ steps:
     out: [output_tpr_file]
 
   step18_mdrun_md:
-    run: biobb_adapters/mdrun.cwl
+    label: Free Molecular Dynamics Simulation - part 2
+    run: biobb/biobb_adapters/cwl/biobb_md/gromacs/mdrun.cwl
     in:
       input_tpr_path: step17_grompp_md/output_tpr_file
     out: [output_trr_file, output_gro_file, output_edr_file, output_log_file, output_cpt_file]
 
   step19_rmsfirst:
-    run: biobb_adapters/rms.cwl
+    label: Post-processing Resulting 3D Trajectory - part 1
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_rms.cwl
     in:
       config: step19_rmsfirst_config
       output_xvg_path: step19_rmsfirst_name
@@ -916,7 +1113,8 @@ steps:
     out: [output_xvg_file]
 
   step20_rmsexp:
-    run: biobb_adapters/rms.cwl
+    label: Post-processing Resulting 3D Trajectory - part 2
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_rms.cwl
     in:
       config: step20_rmsexp_config
       output_xvg_path: step20_rmsexp_name
@@ -925,7 +1123,8 @@ steps:
     out: [output_xvg_file]
 
   step21_rgyr:
-    run: biobb_adapters/rgyr.cwl
+    label: Post-processing Resulting 3D Trajectory - part 3
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_rgyr.cwl
     in:
       config: step21_rgyr_config
       input_structure_path: step8_grompp_min/output_tpr_file
@@ -933,7 +1132,8 @@ steps:
     out: [output_xvg_file]
 
   step22_image:
-    run: biobb_adapters/gmximage.cwl
+    label: Post-processing Resulting 3D Trajectory - part 4
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_image.cwl
     in:
       config: step22_image_config
       input_top_path: step17_grompp_md/output_tpr_file
@@ -941,7 +1141,8 @@ steps:
     out: [output_traj_file]
 
   step23_dry:
-    run: biobb_adapters/gmxtrjconvstr.cwl
+    label: Post-processing Resulting 3D Trajectory - part 5
+    run: biobb/biobb_adapters/cwl/biobb_analysis/gromacs/gmx_trjconv_str.cwl
     in:
       config: step23_dry_config
       input_structure_path: step18_mdrun_md/output_gro_file
@@ -997,7 +1198,7 @@ It is worth to note that as this workflow is using different **BioExcel building
 The **command line** is shown in the cell below:
 
 
-```python
+```bash
 # Run CWL workflow with CWL tool description reference implementation (cwltool).
 cwltool BioExcel-CWL-MDSetup.cwl BioExcel-CWL-MDSetup-job.yml
 ```
