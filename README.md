@@ -10,17 +10,28 @@ This tutorial aims to illustrate the process of **building up a CWL workflow** u
 
 ## Settings
 
+### Software requirements
+
+Follow these links to install the required software.
+
+* [cwltool](https://github.com/common-workflow-language/cwltool): Common Workflow Language tool description reference implementation.
+* [docker](https://www.docker.com/): Docker container platform.
+
+### Biobb CWL workspace template
+
+Create a workspace for this tutorial by following this link.
+
+* [template](https://github.com/bioexcel/biobb-cwl-tutorial-template): Example setup for working with biobb CWL workflows. 
+
 ### Biobb modules used
 
+These are installed in your workspace by using the CWL template above.
+
+* [biobb_adapters](https://github.com/bioexcel/biobb_adapters): Biobb tool collection (includes the tools listed below).
 * [biobb_io](https://github.com/bioexcel/biobb_io): Tools to fetch data to be consumed by the rest of the Biobb building blocks.
 * [biobb_model](https://github.com/bioexcel/biobb_model): Tools to model macromolecular structures.
 * [biobb_md](https://github.com/bioexcel/biobb_md): Tools to setup and run Molecular Dynamics simulations.
 * [biobb_analysis](https://github.com/bioexcel/biobb_analysis): Tools to analyse Molecular Dynamics trajectories.
-
-### Software requirements
-
-* [cwltool](https://github.com/common-workflow-language/cwltool): Common Workflow Language tool description reference implementation.
-* [docker](https://www.docker.com/): Docker container platform.
 
 ***
 
