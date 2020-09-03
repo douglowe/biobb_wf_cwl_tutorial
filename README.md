@@ -19,7 +19,7 @@ Follow these links to install the required software.
 
 ### Biobb CWL workspace template
 
-Create a workspace for this tutorial by following this link.
+Create a workspace for this tutorial by following the instructions in this link.
 
 * [template](https://github.com/bioexcel/biobb-cwl-tutorial-template): Example setup for working with biobb CWL workflows. 
 
